@@ -1,0 +1,4 @@
+composer.lock
+/vendor/
+constants.php
+filelib-example.json
