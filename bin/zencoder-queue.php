@@ -4,7 +4,7 @@ use Pekkis\Queue\Processor\ConsoleOutputSubscriber as ProcessorConsoleOutputSubs
 use Pekkis\Queue\Processor\Processor;
 use Pekkis\Queue\SymfonyBridge\ConsoleOutputSubscriber;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Xi\Filelib\Queue\FilelibMessageHandler;
+use Xi\Filelib\Asynchrony\Queue\FilelibMessageHandler;
 
 require_once __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/../constants.php';
@@ -15,6 +15,7 @@ $output = new ConsoleOutput();
 $queueSubscriber = new ConsoleOutputSubscriber($output);
 $processorSubscriber = new ProcessorConsoleOutputSubscriber($output);
 
+$queue = $pekkisQueueStrategy->getQueue();
 $queue->addSubscriber($queueSubscriber);
 $queue->addSubscriber($processorSubscriber);
 

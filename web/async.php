@@ -1,13 +1,17 @@
 <?php
 
-use Xi\Filelib\Command\ExecutionStrategy\ExecutionStrategy;
 use Xi\Filelib\File\FileRepository;
 use Xi\Filelib\Plugin\Image\VersionPlugin;
 use Xi\Filelib\Plugin\VersionProvider\OriginalVersionPlugin;
 
 require_once __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/../constants.php';
+
 require_once __DIR__ . '/../async-common.php';
+$filelib->getFileRepository()->setExecutionStrategy(
+    \Xi\Filelib\Asynchrony\FileRepository::COMMAND_AFTERUPLOAD,
+    \Xi\Filelib\Asynchrony\ExecutionStrategies::STRATEGY_ASYNC_PEKKIS_QUEUE
+);
 
 $originalPlugin = new OriginalVersionPlugin('original');
 $filelib->addPlugin($originalPlugin);
@@ -51,14 +55,7 @@ $uploaders = array();
 for ($x = 1; $x <= 10; $x++) {
     foreach ($diterator as $file) {
         if ($file->isFile()) {
-
-            $filelib->getFileRepository()->setExecutionStrategy(
-                FileRepository::COMMAND_AFTERUPLOAD,
-                ExecutionStrategy::STRATEGY_ASYNCHRONOUS
-            );
-
-            $filelib->getFileRepository()->upload($file->getRealPath());
-
+            $filelib->uploadFile($file->getRealPath());
             $uploaders[] = $file->getRealPath();
         }
     }

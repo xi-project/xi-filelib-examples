@@ -4,13 +4,19 @@ use Xi\Filelib\Plugin\Video\ZencoderPlugin;
 use Xi\Filelib\Publisher\Adapter\Filesystem\SymlinkFilesystemPublisherAdapter;
 use Xi\Filelib\Publisher\Linker\CreationTimeLinker;
 use Xi\Filelib\Publisher\Publisher;
+use Aws\S3\S3Client;
 
 $zencoderPlugin = new ZencoderPlugin(
-    'zencoder',
     ZENCODER_KEY,
-    S3_KEY,
-    S3_SECRETKEY,
     ZENCODER_BUCKET,
+    new S3Client([
+        'credentials' => [
+            'key' => S3_KEY,
+            'secret' => S3_SECRETKEY,
+        ],
+        'region' => 'us-east-1',
+        'version' => '2006-03-01',
+    ]),
     array(
         '720p_webm' => array(
             'extension' => 'webm',

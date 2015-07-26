@@ -12,9 +12,7 @@ $id = $_GET['id'];
 $file = $filelib->getFileRepository()->find($id);
 
 if ($file->getStatus() == File::STATUS_COMPLETED) {
-    if (!$publisher->isPublished($file)) {
-        $publisher->publishAllVersions($file);
-    }
+    $publisher->publishAllVersions($file);
 }
 
 

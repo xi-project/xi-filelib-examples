@@ -1,6 +1,5 @@
 <?php
 
-use Xi\Filelib\Command\ExecutionStrategy\ExecutionStrategy;
 use Xi\Filelib\File\FileRepository;
 
 if (is_file(__DIR__ . '/../filelib-example.json')) {
@@ -13,11 +12,11 @@ require_once __DIR__ . '/../constants.php';
 require_once __DIR__ . '/../async-common.php';
 require_once __DIR__ . '/../zencoder-common.php';
 
-$path = realpath(__DIR__ . '/../../../tests/data/hauska-joonas.mp4');
+$path = realpath(__DIR__ . '/../hauska-joonas.mp4');
 
 $filelib->getFileRepository()->setExecutionStrategy(
-    FileRepository::COMMAND_AFTERUPLOAD,
-    ExecutionStrategy::STRATEGY_ASYNCHRONOUS
+    \Xi\Filelib\Asynchrony\FileRepository::COMMAND_AFTERUPLOAD,
+    \Xi\Filelib\Asynchrony\ExecutionStrategies::STRATEGY_ASYNC_PEKKIS_QUEUE
 );
 
 $file = $filelib->uploadFile($path);

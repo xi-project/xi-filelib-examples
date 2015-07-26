@@ -1,6 +1,13 @@
 <?php
 
+require_once __DIR__ . '/constants.php';
+
 use Pekkis\Queue\Adapter\PhpAMQPAdapter;
+
+use Xi\Filelib\Asynchrony\Asynchrony;
+use Xi\Filelib\Asynchrony\ExecutionStrategy\PekkisQueueExecutionStrategy;
+
+$asynchrony = new Asynchrony($filelib);
 
 $adapter = new PhpAMQPAdapter(
     RABBITMQ_HOST,
@@ -12,7 +19,9 @@ $adapter = new PhpAMQPAdapter(
     'filelib_example_queue'
 );
 
-// Filelib creates its queue with our adapter
-$filelib->createQueueFromAdapter($adapter);
+$pekkisQueueStrategy = new PekkisQueueExecutionStrategy(
+    $adapter,
+    $filelib
+);
 
-$queue = $filelib->getQueue();
+$asynchrony->addStrategy($pekkisQueueStrategy);
